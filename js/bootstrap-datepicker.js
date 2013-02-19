@@ -802,7 +802,7 @@
 	};
 
 	var old = $.fn.datepicker;
-	$.fn.datepicker = function ( option ) {
+	var datepicker = $.fn.datepicker = function ( option ) {
 		var args = Array.apply(null, arguments);
 		args.shift();
 		return this.each(function () {
@@ -810,7 +810,7 @@
 				data = $this.data('datepicker'),
 				options = typeof option == 'object' && option;
 			if (!data) {
-				$this.data('datepicker', (data = new Datepicker(this, $.extend({}, $.fn.datepicker.defaults,options))));
+				$this.data('datepicker', (data = new Datepicker(this, $.extend({}, datepicker.defaults, options))));
 			}
 			if (typeof option == 'string' && typeof data[option] == 'function') {
 				data[option].apply(data, args);
@@ -1017,22 +1017,21 @@
 	$.fn.datepicker.DPGlobal = DPGlobal;
 
 	/* DATEPICKER NO CONFLICT
-	* =================== */
+	 * =================== */
 
 	$.fn.datepicker.noConflict = function () {
 		$.fn.datepicker = old;
 		return this;
-	}
-
+	};
 
 	/* DATEPICKER DATA-API
-	* ================== */
+	 * ================== */
 
 	$(document).on('focus.datepicker.data-api', '[data-provide="datepicker"]', function (e) {
 		var $this = $(this);
 		if ($this.data('datepicker')) return;
 		e.preventDefault();
-		$this.datepicker($this.data());
-	})
+		datepicker.call($this, $this.data());
+	});
 
 }( window.jQuery );
